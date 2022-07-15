@@ -17,7 +17,60 @@ export function ContactsList() {
             <span>Nome</span> <img src={icons.arrow} alt="" srcSet="" />
           </button>
         </header>
-        <Card />
+        <Card>
+          <div className="info">
+            <div className="contact-name">
+              <strong>Higor Matheus</strong>
+              <small>Instagram</small>
+            </div>
+            <span>higormatheus@dev.com</span>
+            <span>(11) 99999-9999</span>
+          </div>
+          <div className="actions">
+            <a href="/#">
+              <img src={icons.edit} alt="" />
+            </a>
+            <button type="button">
+              <img src={icons.trash} alt="" />
+            </button>
+          </div>
+        </Card>
+        <Card>
+          <div className="info">
+            <div className="contact-name">
+              <strong>Higor Matheus</strong>
+              <small>Instagram</small>
+            </div>
+            <span>higormatheus@dev.com</span>
+            <span>(11) 99999-9999</span>
+          </div>
+          <div className="actions">
+            <a href="/#">
+              <img src={icons.edit} alt="" />
+            </a>
+            <button type="button">
+              <img src={icons.trash} alt="" />
+            </button>
+          </div>
+        </Card>{' '}
+        <Card>
+          <div className="info">
+            <div className="contact-name">
+              <strong>Higor Matheus</strong>
+              <small>Instagram</small>
+            </div>
+            <span>higormatheus@dev.com</span>
+            <span>(11) 99999-9999</span>
+          </div>
+          <div className="actions">
+            <a href="/#">
+              <img src={icons.edit} alt="" />
+            </a>
+            <button type="button">
+              <img src={icons.trash} alt="" />
+            </button>
+          </div>
+        </Card>
       </ListContainer>
     </Container>
   );
