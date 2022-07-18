@@ -8,12 +8,10 @@ import {
 } from './styles';
 
 import { icons } from '../../assets/images/icons';
-import Modal from '../../components/Modal';
 
 function Home() {
   return (
     <Container>
-      <Modal />
       <InputSearchContainer>
         <input type="text" placeholder="Pesquisar contato..." />
       </InputSearchContainer>
