@@ -11,8 +11,8 @@ function ContactForm({ buttonLabel }) {
       <FormGroup>
         <Input name="nome" placeholder="Nome" />
       </FormGroup>
-      <FormGroup>
-        <Input name="nome" placeholder="E-mail" />
+      <FormGroup error="Digite o email corretamente">
+        <Input name="nome" placeholder="E-mail" error />
       </FormGroup>
       <FormGroup>
         <Input name="nome" placeholder="Telefone" />
