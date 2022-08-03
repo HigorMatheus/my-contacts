@@ -4,7 +4,7 @@ class ContactController {
   async index(request, response) {
     const { orderBy } = request.query;
     const contacts = await ContactsRepository.findAll(orderBy);
-    response.json(contacts);
+    response.status(200).json(contacts);
   }
 
   async show(request, response) {
@@ -14,7 +14,7 @@ class ContactController {
     if (!contact) {
       return response.status(404).json({ message: 'user not found' });
     }
-    response.json(contact);
+    response.status(200).json(contact);
   }
 
   async store(request, response) {
