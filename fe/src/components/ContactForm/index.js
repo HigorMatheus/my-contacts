@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import formatPhone from '../../hooks/formatPhone';
+import useErros from '../../hooks/useErros';
 import isEmailValid from '../../utils/isEmailValid';
 import Button from '../Button';
 import FormGroup from '../FormGroup';
@@ -12,51 +14,41 @@ function ContactForm({ buttonLabel }) {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
-  const [erros, setErros] = useState([]);
+  const { setError, removeError, getErrorMessageByFieldName, erros } =
+    useErros();
+  // const [erros, setErros] = useState([]);
+
+  const isFormValid = name && erros.length === 0;
   const handleNameChange = (event) => {
     setName(event.target.value);
     if (!event.target.value) {
-      setErros((prevState) => [
-        ...prevState,
-        { field: 'name', message: 'Nome é Obrigatório' },
-      ]);
+      setError({ field: 'name', message: 'Nome é Obrigatório' });
     } else {
-      setErros((prevState) =>
-        prevState.filter((error) => error.field !== 'name'),
-      );
+      removeError('name');
     }
   };
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
     if (event.target.value && !isEmailValid(event.target.value)) {
-      const errorAlreadyExists = erros.find((error) => error.field === 'email');
-      if (errorAlreadyExists) {
-        return;
-      }
-      setErros((prevState) => [
-        ...prevState,
-        { field: 'email', message: 'Email invalido' },
-      ]);
+      setError({ field: 'email', message: 'Email invalido' });
     } else {
-      setErros((prevState) =>
-        prevState.filter((error) => error.field !== 'email'),
-      );
+      removeError('email');
     }
   };
 
-  const getErrorMessageByFieldName = (fieldName) => {
-    return erros.find((error) => error.field === fieldName)?.message;
+  const handlePhoneChange = (event) => {
+    setPhone(formatPhone(event.target.value));
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
   };
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} noValidate>
       <FormGroup error={getErrorMessageByFieldName('name')}>
         <Input
-          placeholder="Nome"
+          placeholder="Nome *"
           value={name}
           onChange={handleNameChange}
           error={getErrorMessageByFieldName('name')}
@@ -64,6 +56,7 @@ function ContactForm({ buttonLabel }) {
       </FormGroup>
       <FormGroup error={getErrorMessageByFieldName('email')}>
         <Input
+          type="email"
           error={getErrorMessageByFieldName('email')}
           placeholder="E-mail"
           value={email}
@@ -74,7 +67,8 @@ function ContactForm({ buttonLabel }) {
         <Input
           placeholder="Telefone"
           value={phone}
-          onChange={(event) => setPhone(event.target.value)}
+          onChange={handlePhoneChange}
+          maxLength={15}
         />
       </FormGroup>
       <FormGroup>
@@ -90,7 +84,9 @@ function ContactForm({ buttonLabel }) {
       </FormGroup>
 
       <ButtonContainer>
-        <Button type="submit">{buttonLabel}</Button>
+        <Button type="submit" disabled={!isFormValid}>
+          {buttonLabel}
+        </Button>
       </ButtonContainer>
     </Form>
   );
