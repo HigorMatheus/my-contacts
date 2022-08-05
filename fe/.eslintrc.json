@@ -18,8 +18,8 @@
   },
   "plugins": [
     "react",
-    "prettier",
-    "react-hooks"
+    "react-hooks",
+    "prettier"
   ],
   "rules": {
     "prettier/prettier": "error",

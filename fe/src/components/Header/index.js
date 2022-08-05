@@ -7,9 +7,6 @@ export function Header() {
   return (
     <Container>
       <img src={logo} alt="MyContactrs" />
-      {/* <InputSearchContainer>
-        <input type="text" placeholder="Pesquisar contato..." />
-      </InputSearchContainer> */}
     </Container>
   );
 }
