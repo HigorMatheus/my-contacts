@@ -2,7 +2,7 @@ import HttpClient from './utils/HttpClient';
 // http://localhost:3333
 class ContactsService {
   constructor() {
-    this.httpClient = new HttpClient('http://localhost:3333');
+    this.httpClient = new HttpClient('http://192.168.15.29:3333');
   }
 
   listContacts = async (orderBy = 'asc') => {
