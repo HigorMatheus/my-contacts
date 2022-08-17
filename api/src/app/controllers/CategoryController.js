@@ -1,9 +1,9 @@
 const CategoriesRepository = require('../repositories/CategoriesRepository');
 
 class CategoryController {
-  index(request, response) {
+  async index(request, response) {
     const { orderBy } = request.params;
-    const data = CategoriesRepository.findAll(orderBy);
+    const data = await CategoriesRepository.findAll(orderBy);
 
     response.json(data);
   }
