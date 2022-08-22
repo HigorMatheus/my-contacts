@@ -20,7 +20,7 @@ import {
 function Home() {
   const [contacts, setContacts] = useState([]);
   const [orderBy, setOrderby] = useState('asc');
-  const [searchTerm, setSearchTerm] = useState('test');
+  const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
