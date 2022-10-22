@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toastEventManager } from '../../../utils/toast';
 import { ToastMessage } from '../ToastMessage';
 import { Container } from './styles';
@@ -7,10 +7,10 @@ export function ToastContainer() {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    function handleAddToast({ type, text }) {
+    function handleAddToast({ type, text, duration }) {
       setMessages((prevState) => [
         ...prevState,
-        { id: Math.random(), type, text },
+        { id: Math.random(), type, text, duration },
       ]);
     }
     toastEventManager.on('addToast', handleAddToast);
@@ -20,17 +20,17 @@ export function ToastContainer() {
     };
   });
 
-  const handleRemoveMessage = () => {
-    console.log('remove message');
-  };
+  const handleRemoveMessage = useCallback((id) => {
+    setMessages((prevState) =>
+      prevState.filter((message) => message.id !== id),
+    );
+  }, []);
   return (
     <Container>
       {messages.map((message) => (
         <ToastMessage
           key={message.id}
-          id={message.id}
-          text={message.text}
-          type={message.type}
+          message={message}
           onRemoveMessage={handleRemoveMessage}
         />
       ))}
