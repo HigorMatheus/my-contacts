@@ -1,4 +1,5 @@
 /* eslint-disable no-nested-ternary */
+
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Loader from '../../components/Loader';
@@ -36,7 +37,6 @@ function Home() {
       const contactsList = await ContactsService.listContacts(orderBy);
 
       setContacts(contactsList);
-      setHasError(false);
     } catch {
       setHasError(true);
     } finally {

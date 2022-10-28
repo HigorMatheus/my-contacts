@@ -2,7 +2,7 @@ import HttpClient from './utils/HttpClient';
 
 class CategoriesService {
   constructor() {
-    this.httpClient = new HttpClient('http://192.168.15.29:3333');
+    this.httpClient = new HttpClient('http://localhost:3333');
   }
 
   listCategories = async () => {
