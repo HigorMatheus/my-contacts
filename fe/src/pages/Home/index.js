@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import Button from '../../components/Button';
+import Modal from '../../components/Modal';
 import { icons } from '../../assets/images/icons';
 import ContactsService from '../../services/ContactsService';
 import { images } from '../../assets/images';
@@ -60,6 +61,13 @@ function Home() {
   return (
     <Container>
       <Loader isLoading={isLoading} />
+      <Modal
+        danger
+        title={`Tem certeza que deseja remover o contato ”${'higor'}”?`}
+        confirmLabel="Deletar"
+      >
+        <p>Esta ação não poderá ser desfeita!</p>
+      </Modal>
       {contacts.length > 0 && (
         <InputSearchContainer>
           <input
