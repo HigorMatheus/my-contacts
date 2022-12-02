@@ -1,21 +1,20 @@
-/* eslint-disable no-nested-ternary */
-
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Loader from '../../components/Loader';
-import Button from '../../components/Button';
-import Modal from '../../components/Modal';
-import { icons } from '../../assets/images/icons';
-import ContactsService from '../../services/ContactsService';
 import { images } from '../../assets/images';
+import { icons } from '../../assets/images/icons';
+import Button from '../../components/Button';
+import Loader from '../../components/Loader';
+import Modal from '../../components/Modal';
+import ContactsService from '../../services/ContactsService';
+import { addToast } from '../../utils/toast';
 import {
-  Container,
   Card,
-  Header,
-  ListHeader,
-  InputSearchContainer,
-  ErrorContainer,
+  Container,
   EmptyListContainer,
+  ErrorContainer,
+  Header,
+  InputSearchContainer,
+  ListHeader,
   SearchNotFoundContainer,
 } from './styles';
 
@@ -26,6 +25,9 @@ function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const [contactBeingDeleted, setContactBeingDeleted] = useState(null);
   const filteredContacts = useMemo(() => {
     return contacts.filter((contact) =>
       contact.name.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -58,13 +60,50 @@ function Home() {
   const handleTryAgain = () => {
     loadContacts();
   };
+
+  const handleDeleteContact = (contact) => {
+    setContactBeingDeleted(contact);
+    setIsDeleteModalVisible(true);
+  };
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalVisible(false);
+    setContactBeingDeleted(null);
+  };
+
+  const handleConfirmDeleteContact = async () => {
+    try {
+      setIsLoadingDelete(true);
+      await ContactsService.deleteContact(contactBeingDeleted.id);
+
+      addToast({
+        type: 'success',
+        text: 'contato deletado com sucesso',
+      });
+
+      setContacts((prevState) =>
+        prevState.filter((contact) => contact.id !== contactBeingDeleted.id),
+      );
+      handleCloseDeleteModal();
+    } catch (error) {
+      addToast({
+        type: 'danger',
+        text: 'Ocorreu um erro ao deletar o contato',
+      });
+    } finally {
+      setIsLoadingDelete(false);
+    }
+  };
   return (
     <Container>
       <Loader isLoading={isLoading} />
       <Modal
+        visible={isDeleteModalVisible}
         danger
-        title={`Tem certeza que deseja remover o contato ”${'higor'}”?`}
+        title={`Tem certeza que deseja remover o contato ”${contactBeingDeleted?.name}”?`}
         confirmLabel="Deletar"
+        isLoading={isLoadingDelete}
+        onCancel={handleCloseDeleteModal}
+        onConfirm={handleConfirmDeleteContact}
       >
         <p>Esta ação não poderá ser desfeita!</p>
       </Modal>
@@ -80,6 +119,7 @@ function Home() {
       )}
       <Header
         justifyContent={
+          // eslint-disable-next-line no-nested-ternary
           hasError
             ? 'flex-end'
             : contacts.length > 0
@@ -152,7 +192,10 @@ function Home() {
                 <Link to={`/edit/${contact.id}`}>
                   <img src={icons.edit} alt="" />
                 </Link>
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={() => handleDeleteContact(contact)}
+                >
                   <img src={icons.trash} alt="" />
                 </button>
               </div>
