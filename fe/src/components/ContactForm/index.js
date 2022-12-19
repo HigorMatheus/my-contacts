@@ -3,6 +3,7 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 
 import formatPhone from '../../hooks/formatPhone';
 import useErros from '../../hooks/useErros';
+import { useSafeAsyncState } from '../../hooks/useSafeAsyncState';
 import CategoriesService from '../../services/CategoriesService';
 import isEmailValid from '../../utils/isEmailValid';
 import Button from '../Button';
@@ -19,8 +20,8 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
   const [categoryId, setCategoryId] = useState('');
   const { setError, removeError, getErrorMessageByFieldName, erros } =
     useErros();
-  const [categories, seCategories] = useState([]);
-  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+  const [categories, seCategories] = useSafeAsyncState([]);
+  const [isLoadingCategories, setIsLoadingCategories] = useSafeAsyncState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isFormValid = name && erros.length === 0;
@@ -56,7 +57,7 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
       }
     }
     loadCategories();
-  }, []);
+  }, [seCategories, setIsLoadingCategories]);
   const handleNameChange = (event) => {
     setName(event.target.value);
     if (!event.target.value) {

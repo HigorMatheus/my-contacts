@@ -3,6 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import ContactForm from '../../components/ContactForm';
 import Loader from '../../components/Loader';
 import PageHeader from '../../components/PageHeader';
+import { useIsMounted } from '../../hooks/useIsMounted';
 import ContactsService from '../../services/ContactsService';
 import { addToast } from '../../utils/toast';
 
@@ -12,25 +13,30 @@ function EditContact() {
   const contactFormRef = useRef(null);
   const { id } = useParams();
   const history = useHistory();
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     async function loadContact() {
       try {
         const contact = await ContactsService.getContactById(id);
 
-        contactFormRef.current.setFieldsValues(contact);
-        setIsLoading(false);
-        setContactName(contact.name);
+        if (isMounted()) {
+          contactFormRef.current.setFieldsValues(contact);
+          setIsLoading(false);
+          setContactName(contact.name);
+        }
       } catch {
-        history.push('/');
-        addToast({
-          type: 'danger',
-          text: 'Contato Nào Encontrado',
-        });
+        if (isMounted()) {
+          history.push('/');
+          addToast({
+            type: 'danger',
+            text: 'Contato Nào Encontrado',
+          });
+        }
       }
     }
     loadContact();
-  }, [history, id]);
+  }, [history, id, isMounted]);
   const handleSubmit = async ({ name, email, phone, categoryId }) => {
     try {
       const contact = {
