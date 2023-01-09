@@ -6,15 +6,8 @@ import { addToast } from '../../utils/toast';
 
 function NewContact() {
   const contactFormRef = useRef(null);
-  const handleSubmit = async ({ name, email, phone, categoryId }) => {
+  const handleSubmit = async (contact) => {
     try {
-      const contact = {
-        name,
-        email,
-        phone,
-        category_id: categoryId,
-      };
-
       await ContactsService.createContact(contact);
       contactFormRef.current.resetFields();
       addToast({
