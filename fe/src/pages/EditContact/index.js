@@ -1,66 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
 import ContactForm from '../../components/ContactForm';
 import Loader from '../../components/Loader';
 import PageHeader from '../../components/PageHeader';
-import { useIsMounted } from '../../hooks/useIsMounted';
-import ContactsService from '../../services/ContactsService';
-import { addToast } from '../../utils/toast';
+import { useEditContact } from './useEditContact';
 
 function EditContact() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [contactName, setContactName] = useState('');
-  const contactFormRef = useRef(null);
-  const { id } = useParams();
-  const history = useHistory();
-  const isMounted = useIsMounted();
-
-  useEffect(() => {
-    async function loadContact() {
-      try {
-        const contact = await ContactsService.getContactById(id);
-
-        if (isMounted()) {
-          contactFormRef.current.setFieldsValues(contact);
-          setIsLoading(false);
-          setContactName(contact.name);
-        }
-      } catch {
-        if (isMounted()) {
-          history.push('/');
-          addToast({
-            type: 'danger',
-            text: 'Contato Nào Encontrado',
-          });
-        }
-      }
-    }
-    loadContact();
-  }, [history, id, isMounted]);
-  const handleSubmit = async ({ name, email, phone, categoryId }) => {
-    try {
-      const contact = {
-        id,
-        name,
-        email,
-        phone,
-        category_id: categoryId,
-      };
-
-      const contactData = await ContactsService.updateContact(id, contact);
-
-      setContactName(contactData.name);
-      addToast({
-        type: 'success',
-        text: 'Contato Editado com sucesso',
-      });
-    } catch (error) {
-      addToast({
-        type: 'danger',
-        text: 'Ocorreu um erro ao editar o contato',
-      });
-    }
-  };
+  const { contactFormRef, contactName, handleSubmit, isLoading } =
+    useEditContact();
   return (
     <>
       <Loader isLoading={isLoading} />
