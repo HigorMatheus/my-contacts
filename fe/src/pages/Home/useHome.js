@@ -24,8 +24,12 @@ export const useHome = () => {
       const contactsList = await ContactsService.listContacts(orderBy);
 
       setContacts(contactsList);
+
+      setIsLoading(false);
+      setHasError(false);
     } catch {
       setHasError(true);
+      setContacts([]);
     } finally {
       setIsLoading(false);
     }
@@ -51,7 +55,6 @@ export const useHome = () => {
   };
   const handleCloseDeleteModal = () => {
     setIsDeleteModalVisible(false);
-    setContactBeingDeleted(null);
   };
 
   const handleConfirmDeleteContact = async () => {
