@@ -1,14 +1,9 @@
 import PropTypes from 'prop-types';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, memo } from 'react';
 import { icons } from '../../../assets/images';
 import { Container } from './styles';
 
-export function ToastMessage({
-  message,
-  onRemoveMessage,
-  isLeaving,
-  animatedRef,
-}) {
+function ToastMessage({ message, onRemoveMessage, isLeaving, animatedRef }) {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       onRemoveMessage(message.id);
@@ -50,3 +45,5 @@ ToastMessage.propTypes = {
   animatedRef: PropTypes.shape().isRequired,
   isLeaving: PropTypes.bool.isRequired,
 };
+
+export default memo(ToastMessage);

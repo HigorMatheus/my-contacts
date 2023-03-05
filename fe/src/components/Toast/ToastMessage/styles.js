@@ -47,7 +47,7 @@ export const Container = styled.div`
   ${({ isLeaving }) =>
     isLeaving &&
     css`
-      animation: ${messageOut} 0.9s;
+      animation: ${messageOut} 1s;
     `}
   img {
     margin-right: 8px;
