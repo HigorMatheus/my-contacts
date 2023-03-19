@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useIsMounted } from '../../hooks/useIsMounted';
+import { useSafeAsyncAction } from '../../hooks/useSafeAsyncAction';
 import ContactsService from '../../services/ContactsService';
 import { addToast } from '../../utils/toast';
 
@@ -9,7 +10,9 @@ export const useEditContact = () => {
   const [contactName, setContactName] = useState('');
   const contactFormRef = useRef(null);
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
+  const safeAsyncAction = useSafeAsyncAction();
+
   const isMounted = useIsMounted();
 
   useEffect(() => {
@@ -31,10 +34,12 @@ export const useEditContact = () => {
           return;
         }
         if (isMounted()) {
-          history.push('/');
-          addToast({
-            type: 'danger',
-            text: 'Contato Nào Encontrado',
+          safeAsyncAction(() => {
+            navigate('/', { replace: true });
+            addToast({
+              type: 'danger',
+              text: 'Contato Nào Encontrado',
+            });
           });
         }
       }
@@ -44,7 +49,8 @@ export const useEditContact = () => {
     return () => {
       controller.abort();
     };
-  }, [history, id, isMounted]);
+  }, [id, isMounted, navigate, safeAsyncAction]);
+
   const handleSubmit = async ({ name, email, phone, categoryId }) => {
     try {
       const contact = {
