@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useCallback, useEffect, memo } from 'react';
+import { useEffect, memo } from 'react';
 import { icons } from '../../../assets/images';
 import { Container } from './styles';
 
@@ -13,9 +13,9 @@ function ToastMessage({ message, onRemoveMessage, isLeaving, animatedRef }) {
       clearTimeout(timeoutId);
     };
   }, [message, onRemoveMessage]);
-  const handleRemoveToast = useCallback(() => {
+  function handleRemoveToast() {
     onRemoveMessage(message.id);
-  }, [message.id, onRemoveMessage]);
+  }
   return (
     <Container
       type={message.type}

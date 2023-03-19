@@ -13,16 +13,23 @@ export const useEditContact = () => {
   const isMounted = useIsMounted();
 
   useEffect(() => {
+    const controller = new AbortController();
     async function loadContact() {
       try {
-        const contact = await ContactsService.getContactById(id);
+        const contact = await ContactsService.getContactById(
+          id,
+          controller.signal,
+        );
 
         if (isMounted()) {
           contactFormRef.current.setFieldsValues(contact);
           setIsLoading(false);
           setContactName(contact.name);
         }
-      } catch {
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          return;
+        }
         if (isMounted()) {
           history.push('/');
           addToast({
@@ -33,6 +40,10 @@ export const useEditContact = () => {
       }
     }
     loadContact();
+
+    return () => {
+      controller.abort();
+    };
   }, [history, id, isMounted]);
   const handleSubmit = async ({ name, email, phone, categoryId }) => {
     try {

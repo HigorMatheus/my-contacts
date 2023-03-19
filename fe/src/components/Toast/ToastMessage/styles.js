@@ -43,11 +43,12 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  animation: ${messageIn} 0.9s;
+  animation: ${messageIn} 0.3s;
+
   ${({ isLeaving }) =>
     isLeaving &&
     css`
-      animation: ${messageOut} 1s;
+      animation: ${messageOut} 2s forwards;
     `}
   img {
     margin-right: 8px;

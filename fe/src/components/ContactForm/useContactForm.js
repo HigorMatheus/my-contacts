@@ -40,9 +40,14 @@ export const useContactForm = ({ onSubmit, ref }) => {
   );
 
   useEffect(() => {
+    const controller = new AbortController();
+
+    controller.abort();
     async function loadCategories() {
       try {
-        const listCategories = await CategoriesService.listCategories();
+        const listCategories = await CategoriesService.listCategories(
+          controller.signal,
+        );
         seCategories(listCategories);
       } catch {
       } finally {
@@ -50,6 +55,9 @@ export const useContactForm = ({ onSubmit, ref }) => {
       }
     }
     loadCategories();
+    return () => {
+      controller.abort();
+    };
   }, [seCategories, setIsLoadingCategories]);
   const handleNameChange = (event) => {
     setName(event.target.value);

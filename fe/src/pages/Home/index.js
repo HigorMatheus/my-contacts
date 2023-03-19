@@ -1,6 +1,6 @@
 import Loader from '../../components/Loader';
 import Modal from '../../components/Modal';
-import { ContactsList } from './components/ContactsList';
+import ContactsList from './components/ContactsList';
 import { EmptyList } from './components/EmptyList';
 import { ErrorStatus } from './components/ErrorStatus';
 import { Header } from './components/Header';
